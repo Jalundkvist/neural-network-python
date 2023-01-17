@@ -1,5 +1,5 @@
 import random
-
+# TODO: Fix comments
 class Dense_layer:
 
     """ Dense_layer class, to be used in a neural network for easy set-up of new layers.
@@ -12,10 +12,10 @@ class Dense_layer:
         self.output = []
         self.num_nodes = 0
         self.num_weights = 0
-        self.set_nodes(num_nodes, num_weights)
+        self.resize(num_nodes, num_weights)
 
-    def set_nodes(self, num_nodes, num_weights):
-        """set_nodes sets the start value on
+    def resize(self, num_nodes, num_weights):
+        """resize updates the start value on
         weights and biases for each node in the given layer
 
         Parameters
@@ -23,7 +23,7 @@ class Dense_layer:
         num_nodes
             number of nodes in current layer
         num_weights
-            number of weights (number of nodes - previous layer)
+            number of weights (number of nodes in previous layer)
         """
         self.num_nodes = num_nodes
         self.num_weights = num_weights
@@ -35,6 +35,7 @@ class Dense_layer:
                                 for _ in range(num_weights)])
 
     def print(self, precision):
+        from time import sleep
         """print the dense_layers values, such as output, error, bias, weights and the
         number of nodes and weights per node.
 
@@ -45,11 +46,14 @@ class Dense_layer:
         """
         self.round(precision)
         print("--------------------------------------------------------")
+        sleep(0.5)
         print(f"Number of nodes:\t\t{self.num_nodes}")
         print(f"Number of weights per node:\t{self.num_weights}")
+        sleep(0.5)
         print(f"Output:\t\t\t\t{self.rounded_output}")
         print(f"Error:\t\t\t\t{self.rounded_error}")
         print(f"Bias:\t\t\t\t{self.rounded_bias}")
+        sleep(0.5)
         print(f"Weights:")
         for i in range(self.num_nodes):
             print(f"\t\t\tNode {i+1}:\t{self.rounded_weights[i]}")
@@ -70,6 +74,17 @@ class Dense_layer:
         self.rounded_error = [round(x, precision) for x in self.error]
 
     def delta_relu(self, x):
+        """delta_relu calculate the derivative of the ReLu
+
+        Parameters
+        ----------
+        x
+            Defines if the node is active or not
+
+        Returns
+        -------
+            Returns 1 if the node is active
+        """        
         if x > 0:
             return 1
         else:
@@ -108,25 +123,49 @@ class Dense_layer:
             self.output[i] = self.relu(sum)
 
     def backprop_outer(self, reference):
+        """backprop_outer calculates error in the outer layer
+        value
+
+        Parameters
+        ----------
+        reference
+            _description_
+        """        
         for i in range(len(self.output)):
             dev = reference[i] - self.output[i]
-            # * self.delta_relu(self.output[i]) # Commented since it removes any error from the output layer.
-            self.error[i] = dev
+             # Commented since it removes any error from the output layer.
+            self.error[i] = dev #* self.delta_relu(self.output[i])
             # IMHO this should not have RELU.
 
     def backprop_hidden(self, next_layer):
+        """backprop_hidden calculates error in the hidden layers
+
+        Parameters
+        ----------
+        next_layer
+            the next hidden layer(counting backwards)
+        """    
         for i in range(len(self.output)):
             sum = 0
             for index, error in enumerate(next_layer.error):
                 sum += error * next_layer.weights[index][i]
                 self.error[i] = sum * self.delta_relu(self.output[i])
-
+                # Felet på aktuell nod = summan av felen från varje föregående nod * respektive weight som går till aktuell nod.
+    
     def optimize(self, input, learn_rate):
+        """optimize the bias and weight in the specified layer
+
+        Parameters
+        ----------
+        input
+            Is used to adjust the weights
+        learn_rate
+            Indicates how much the bias and weights is gonna adjust
+        """        
         for i in range(len(self.output)):
             self.bias[i] += self.error[i] * learn_rate
             for j in range(self.num_weights):
                 self.weights[i][j] += self.error[i] * learn_rate * input[j]
-
 
 if __name__ == "__main__":
     print("Not the main file")
