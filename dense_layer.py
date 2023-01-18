@@ -1,4 +1,5 @@
 import random
+import math
 # TODO: Fix comments
 class Dense_layer:
 
@@ -25,19 +26,26 @@ class Dense_layer:
         num_weights
             number of weights (number of nodes in previous layer)
         """
-        self.num_nodes = num_nodes
-        self.num_weights = num_weights
+        self.error.clear()
+        self.output.clear()
+        self.bias.clear()
+        self.weights.clear()
+        
         self.error = [0] * num_nodes
         self.output = [0] * num_nodes
+        self.num_nodes = num_nodes
+        self.num_weights = num_weights
+        
         for _ in range(num_nodes):
             self.bias.append(round(random.uniform(0, 1), 2))
             self.weights.append([round(random.uniform(0, 1), 2)
                                 for _ in range(num_weights)])
 
+
     def print(self, precision):
         from time import sleep
         """print the dense_layers values, such as output, error, bias, weights and the
-        number of nodes and weights per node.
+        number of nodes and weights per node. sleep is used to avoid faulty prints.
 
         Parameters
         ----------
@@ -46,18 +54,19 @@ class Dense_layer:
         """
         self.round(precision)
         print("--------------------------------------------------------")
-        sleep(0.5)
         print(f"Number of nodes:\t\t{self.num_nodes}")
         print(f"Number of weights per node:\t{self.num_weights}")
         sleep(0.5)
-        print(f"Output:\t\t\t\t{self.rounded_output}")
-        print(f"Error:\t\t\t\t{self.rounded_error}")
-        print(f"Bias:\t\t\t\t{self.rounded_bias}")
+        print(f"Output:\t\t\t\t{self.output}")
+        print(f"Error:\t\t\t\t{self.error}")
         sleep(0.5)
+        print(f"Bias:\t\t\t\t{self.bias}")
         print(f"Weights:")
         for i in range(self.num_nodes):
-            print(f"\t\t\tNode {i+1}:\t{self.rounded_weights[i]}")
+            print(f"\t\t\tNode {i+1}:\t{self.weights[i]}")
+            sleep(0.2)
         print("--------------------------------------------------------")
+        sleep(0.5)
 
     def round(self, precision):
         """round all the values to number of decimals
@@ -67,45 +76,10 @@ class Dense_layer:
         precision
             number of decimals
         """
-        self.rounded_bias = [round(x, precision) for x in self.bias]
-        self.rounded_weights = [
-            [round(x, precision) for x in sublist] for sublist in self.weights]
-        self.rounded_output = [round(x, precision) for x in self.output]
-        self.rounded_error = [round(x, precision) for x in self.error]
-
-    def delta_relu(self, x):
-        """delta_relu calculate the derivative of the ReLu
-
-        Parameters
-        ----------
-        x
-            Defines if the node is active or not
-
-        Returns
-        -------
-            Returns 1 if the node is active
-        """        
-        if x > 0:
-            return 1
-        else:
-            return 0
-
-    def relu(self, output):
-        """relu simple ReLu activation method.
-
-        Parameters
-        ----------
-        output
-            value from a nodes output.
-
-        Returns
-        -------
-            output if value is greater than 0.
-        """        
-        if output > 0:
-            return output
-        else:
-            return 0
+        self.bias = [round(x, precision) for x in self.bias]
+        self.weights = [[round(x, precision) for x in sublist] for sublist in self.weights]
+        self.output = [round(x, precision) for x in self.output]
+        self.error = [round(x, precision) for x in self.error]
 
     def feedforward(self, input):
         """feedforward takes the input values from either previous layer or and feeds it through
@@ -120,7 +94,8 @@ class Dense_layer:
             sum = self.bias[i]
             for j in range(self.num_weights):
                 sum += input[j] * self.weights[i][j]
-            self.output[i] = self.relu(sum)
+            self.output[i] = math.tanh(sum)#self.relu(sum)
+        return
 
     def backprop_outer(self, reference):
         """backprop_outer calculates error in the outer layer
@@ -129,13 +104,13 @@ class Dense_layer:
         Parameters
         ----------
         reference
-            _description_
+            reference training data
         """        
-        for i in range(len(self.output)):
+        for i in range(self.num_nodes):
             dev = reference[i] - self.output[i]
-             # Commented since it removes any error from the output layer.
-            self.error[i] = dev #* self.delta_relu(self.output[i])
-            # IMHO this should not have RELU.
+            self.error[i] = dev * (1 - math.tanh(self.output[i])**2)
+        return
+
 
     def backprop_hidden(self, next_layer):
         """backprop_hidden calculates error in the hidden layers
@@ -149,8 +124,8 @@ class Dense_layer:
             sum = 0
             for index, error in enumerate(next_layer.error):
                 sum += error * next_layer.weights[index][i]
-                self.error[i] = sum * self.delta_relu(self.output[i])
-                # Felet på aktuell nod = summan av felen från varje föregående nod * respektive weight som går till aktuell nod.
+            self.error[i] = sum * (1 - math.tanh(self.output[i])**2)
+        return
     
     def optimize(self, input, learn_rate):
         """optimize the bias and weight in the specified layer
@@ -166,6 +141,7 @@ class Dense_layer:
             self.bias[i] += self.error[i] * learn_rate
             for j in range(self.num_weights):
                 self.weights[i][j] += self.error[i] * learn_rate * input[j]
+        return
 
 if __name__ == "__main__":
     print("Not the main file")
