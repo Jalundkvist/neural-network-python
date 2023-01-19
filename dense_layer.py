@@ -1,6 +1,6 @@
 import random
 import math
-# TODO: Fix comments
+
 class Dense_layer:
 
     """ Dense_layer class, to be used in a neural network for easy set-up of new layers.
