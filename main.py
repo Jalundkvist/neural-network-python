@@ -7,6 +7,7 @@ TODO: Update comments
 TODO: test on RPI
 TODO: Add RPI buttons & LED.
 """
+
 EPOCHS = 30000
 LEARN_RATE = 0.0255
 DATA_FILE = "train_data"
