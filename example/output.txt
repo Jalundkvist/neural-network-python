@@ -1,0 +1,95 @@
+OUTPUT AFTER TRAINING
+
+Number of inputs:	4
+Number of outputs:	1
+Number of hidden layers: 3
+Hidden layer 0: 5 nodes
+Hidden layer 1: 4 nodes
+Hidden layer 2: 6 nodes
+Epochs:	5000
+Learn rate:	0.0255
+
+Final output weight: [[-1.59, -1.76, -0.05, -0.71, 2.18, 0.42]]
+Final output bias:	 [1.15]
+------------------------------------------
+input_data:		[0, 0, 0, 0]
+reference_data:	[0]
+Prediction:	0
+Error:	0.118
+------------------------------------------
+input_data:		[0, 0, 0, 1]
+reference_data:	[1]
+Prediction:	1
+Error:	0.001
+------------------------------------------
+input_data:		[0, 0, 1, 0]
+reference_data:	[1]
+Prediction:	1
+Error:	0.001
+------------------------------------------
+input_data:		[0, 0, 1, 1]
+reference_data:	[0]
+Prediction:	0
+Error:	-0.003
+------------------------------------------
+input_data:		[0, 1, 0, 0]
+reference_data:	[1]
+Prediction:	1
+Error:	0.001
+------------------------------------------
+input_data:		[0, 1, 0, 1]
+reference_data:	[0]
+Prediction:	0
+Error:	-0.001
+------------------------------------------
+input_data:		[0, 1, 1, 0]
+reference_data:	[0]
+Prediction:	0
+Error:	-0.003
+------------------------------------------
+input_data:		[0, 1, 1, 1]
+reference_data:	[1]
+Prediction:	1
+Error:	0.002
+------------------------------------------
+input_data:		[1, 0, 0, 0]
+reference_data:	[1]
+Prediction:	1
+Error:	0.000
+------------------------------------------
+input_data:		[1, 0, 0, 1]
+reference_data:	[0]
+Prediction:	0
+Error:	-0.017
+------------------------------------------
+input_data:		[1, 0, 1, 0]
+reference_data:	[0]
+Prediction:	0
+Error:	-0.008
+------------------------------------------
+input_data:		[1, 0, 1, 1]
+reference_data:	[1]
+Prediction:	1
+Error:	0.002
+------------------------------------------
+input_data:		[1, 1, 0, 0]
+reference_data:	[0]
+Prediction:	0
+Error:	0.003
+------------------------------------------
+input_data:		[1, 1, 0, 1]
+reference_data:	[1]
+Prediction:	1
+Error:	0.002
+------------------------------------------
+input_data:		[1, 1, 1, 0]
+reference_data:	[1]
+Prediction:	1
+Error:	0.002
+------------------------------------------
+input_data:		[1, 1, 1, 1]
+reference_data:	[0]
+Prediction:	0
+Error:	-0.005
+------------------------------------------
+Accuracy:	98.94%
