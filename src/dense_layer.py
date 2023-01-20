@@ -1,11 +1,17 @@
 import random
 import math
-
 class Dense_layer:
-
-    """ Dense_layer class, to be used in a neural network for easy set-up of new layers.
     """
-
+    Dense_layer class, to be used in a neural network for easy set-up of new layers.
+    It has methods for feedforward, backpropagation, weight optimization, resizing and printing the current values of the layer.
+    
+    Parameters
+    ----------
+    num_nodes:
+        Number of nodes in the current layer.
+    num_weights:
+        Number of weights (number of nodes in the previous layer).
+    """
     def __init__(self, num_nodes, num_weights) -> None:
         self.error = []
         self.bias = []
@@ -16,15 +22,16 @@ class Dense_layer:
         self.resize(num_nodes, num_weights)
 
     def resize(self, num_nodes, num_weights):
-        """resize updates the start value on
-        weights and biases for each node in the given layer
+        """resize:
+            Updates the start value on weights and biases for 
+            each node in the given layer.
 
         Parameters
         ----------
         num_nodes
-            number of nodes in current layer
+            number of nodes in current layer.
         num_weights
-            number of weights (number of nodes in previous layer)
+            number of weights (number of nodes in previous layer).
         """
         self.error.clear()
         self.output.clear()
@@ -41,16 +48,16 @@ class Dense_layer:
             self.weights.append([round(random.uniform(0, 1), 2)
                                 for _ in range(num_weights)])
 
-
     def print(self, precision):
         from time import sleep
-        """print the dense_layers values, such as output, error, bias, weights and the
-        number of nodes and weights per node. sleep is used to avoid faulty prints.
+        """print: 
+            Prints the dense_layers values, such as output, error, bias, weights and the
+            number of nodes and weights per node. sleep is used to avoid faulty prints.
 
         Parameters
         ----------
         precision
-            number of decimals
+            number of decimals.
         """
         self.round(precision)
         print("--------------------------------------------------------")
@@ -69,12 +76,13 @@ class Dense_layer:
         sleep(0.5)
 
     def round(self, precision):
-        """round all the values to number of decimals
+        """round:
+            Rounds all the values to number of decimals.
 
         Parameters
         ----------
         precision
-            number of decimals
+            number of decimals.
         """
         self.bias = [round(x, precision) for x in self.bias]
         self.weights = [[round(x, precision) for x in sublist] for sublist in self.weights]
@@ -82,43 +90,44 @@ class Dense_layer:
         self.error = [round(x, precision) for x in self.error]
 
     def feedforward(self, input):
-        """feedforward takes the input values from either previous layer or and feeds it through
-        the nodes in the given layer algorithm
+        """feedforward:
+            Takes the input values from either previous layer or and feeds it through
+            the nodes in the given layer algorithm.
 
         Parameters
         ----------
         input
-            _description_
-        """        
+            output from previous layer.
+        """
         for i in range(self.num_nodes):
             sum = self.bias[i]
             for j in range(self.num_weights):
                 sum += input[j] * self.weights[i][j]
-            self.output[i] = math.tanh(sum)#self.relu(sum)
+            self.output[i] = math.tanh(sum)
         return
 
     def backprop_outer(self, reference):
-        """backprop_outer calculates error in the outer layer
-        value
+        """backprop_outer:
+            Calculates error in the outer layer value.
 
         Parameters
         ----------
         reference
-            reference training data
+            reference training data.
         """        
         for i in range(self.num_nodes):
             dev = reference[i] - self.output[i]
             self.error[i] = dev * (1 - math.tanh(self.output[i])**2)
         return
 
-
     def backprop_hidden(self, next_layer):
-        """backprop_hidden calculates error in the hidden layers
+        """backprop_hidden:
+            calculates error in the hidden layers.
 
         Parameters
         ----------
-        next_layer
-            the next hidden layer(counting backwards)
+        next_layer:
+            The next hidden layer(counting backwards).
         """    
         for i in range(len(self.output)):
             sum = 0
@@ -128,14 +137,15 @@ class Dense_layer:
         return
     
     def optimize(self, input, learn_rate):
-        """optimize the bias and weight in the specified layer
+        """optimize:
+            The bias and weight in the specified layer.
 
         Parameters
         ----------
         input
-            Is used to adjust the weights
+            Is used to adjust the weights.
         learn_rate
-            Indicates how much the bias and weights is gonna adjust
+            Indicates how much the bias and weight should adjust.
         """        
         for i in range(len(self.output)):
             self.bias[i] += self.error[i] * learn_rate
@@ -144,4 +154,4 @@ class Dense_layer:
         return
 
 if __name__ == "__main__":
-    print("Not the main file")
+    print("Executing module dense_layer.py, not recommended.")
