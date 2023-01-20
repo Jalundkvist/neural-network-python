@@ -17,6 +17,10 @@ class Ann:
         Number of nodes in each hidden layer.
     """   
     def __init__(self, num_inputs, num_outputs, num_hidden_layers, num_hidden_nodes):
+        assert num_inputs > 0, "Number of inputs must be greater than 0"
+        assert num_outputs > 0, "Number of outputs must be greater than 0"
+        assert num_hidden_layers > 0, "Number of hidden layers must be greater than 0"
+        assert all(val > 0 for val in num_hidden_nodes), "Number of hidden nodes must be greater than 0"
 
         self._num_inputs = num_inputs
         self._num_outputs = num_outputs
