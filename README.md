@@ -9,6 +9,19 @@ The goal of this project was to construct a neural network from the ground up wi
 
 PDF of [assignment](docs/Projekt%20II%20%E2%80%93%20Neuralt%20n%C3%A4tverk%20i%20ett%20inbyggt%20system.pdf) (swedish)
 
+### Available functions from Ann class.
+
+```
+Ann()               - Constructor.
+read_file           - Helper function to fetch training data from txt file.
+set_training_data   - Stores the training data.
+resize_hidden_layer - Updates the number of nodes on a given layer.
+train               - Trains the neural network
+predict             - returns a list of the predictions, works only if the network has been 
+                      succesfully trained.
+```
+
+
 ## Results
 The final results obtained were promising, with minor obstacles encountered during the development process. One of the most significant obstacles we faced was our persistent use of the ReLu activation function. While ReLu is resource efficient and suitable for simple networks with simple patterns, as the complexity of the network increased, so did the errors. This was due to the fact that all the nodes in the network "turned off" as a result of the ReLu activation function. To address this issue, we updated our feedforward and backpropagation algorithm to utilize the tanh activation function, which is a non-linear, zero-centered function. This resulted in more accurate predictions.
 

@@ -9,13 +9,13 @@ Hidden layer 2: 6 nodes
 Epochs:	10000
 Learn rate:	0.0255
 
-Final output weight: [[1.87, 0.52, 2.14, 1.49, 2.54, 0.6]]
-Final output bias:	 [0.15]
+Final output weight: [[1.58, -1.61, -0.99, -0.38, 1.85, -1.56]]
+Final output bias:	 [0.51]
 ------------------------------------------
 input_data:		[0, 0, 0, 0]
 reference_data:	[0]
 Prediction:	0
-Error:	0.009
+Error:	0.005
 ------------------------------------------
 input_data:		[0, 0, 0, 1]
 reference_data:	[1]
@@ -30,7 +30,7 @@ Error:	0.000
 input_data:		[0, 0, 1, 1]
 reference_data:	[0]
 Prediction:	0
-Error:	0.004
+Error:	-0.005
 ------------------------------------------
 input_data:		[0, 1, 0, 0]
 reference_data:	[1]
@@ -40,12 +40,12 @@ Error:	0.000
 input_data:		[0, 1, 0, 1]
 reference_data:	[0]
 Prediction:	0
-Error:	-0.000
+Error:	-0.004
 ------------------------------------------
 input_data:		[0, 1, 1, 0]
 reference_data:	[0]
 Prediction:	0
-Error:	0.021
+Error:	-0.000
 ------------------------------------------
 input_data:		[0, 1, 1, 1]
 reference_data:	[1]
@@ -60,12 +60,12 @@ Error:	0.000
 input_data:		[1, 0, 0, 1]
 reference_data:	[0]
 Prediction:	0
-Error:	-0.011
+Error:	-0.004
 ------------------------------------------
 input_data:		[1, 0, 1, 0]
 reference_data:	[0]
 Prediction:	0
-Error:	0.011
+Error:	-0.004
 ------------------------------------------
 input_data:		[1, 0, 1, 1]
 reference_data:	[1]
@@ -75,7 +75,7 @@ Error:	0.000
 input_data:		[1, 1, 0, 0]
 reference_data:	[0]
 Prediction:	0
-Error:	0.010
+Error:	-0.000
 ------------------------------------------
 input_data:		[1, 1, 0, 1]
 reference_data:	[1]
@@ -90,6 +90,6 @@ Error:	0.000
 input_data:		[1, 1, 1, 1]
 reference_data:	[0]
 Prediction:	0
-Error:	0.079
+Error:	-0.018
 ------------------------------------------
-Accuracy:	99.09%
+Accuracy:	99.75%
