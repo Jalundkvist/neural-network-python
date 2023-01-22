@@ -15,6 +15,18 @@ class Ann:
         Number of hidden layers in the neural network.
     _num_hidden_nodes:
         Number of nodes in each hidden layer.
+        
+    Variables
+    ----------
+    _training_complete:
+        bool, used to validate training.
+    _accuracy:
+        int that updates after training.
+    _input_data:
+        2d list(array) of input data.
+    _reference_data:
+        2d list(array) of reference data.
+    
     """   
     def __init__(self, num_inputs, num_outputs, num_hidden_layers, num_hidden_nodes):
         assert num_inputs > 0, "Number of inputs must be greater than 0"

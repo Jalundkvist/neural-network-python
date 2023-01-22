@@ -25,7 +25,8 @@ such as number of epochs and learning rate, before beginning training.
 Once training is complete, it prints out how long it took to complete training. 
 
 For this example the data for a 4 to 1 XOR gate has been used. Acceptable results of 99.x% accuracy with
-10k epochs and learn rate set to 0.0255, 3 hidden layers with 4 nodes each.
+10k epochs and learn rate set to 0.0255, 3 hidden layers with 5-4-6 nodes respectively by 
+using the "resize_hidden_layer" method.
 If the training fails you will be prompted to repeat training (might occur depending on initial weights & biases).
 """
 def main():
