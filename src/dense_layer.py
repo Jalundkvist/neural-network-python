@@ -3,7 +3,8 @@ import math
 class Dense_layer:
     """
     Dense_layer class, to be used in a neural network for easy set-up of new layers.
-    It has methods for feedforward, backpropagation, weight optimization, resizing and printing the current values of the layer.
+    It has methods for feedforward, backpropagation, weight optimization, resizing and 
+    printing the current values of the layer.
     
     Parameters
     ----------
@@ -11,6 +12,17 @@ class Dense_layer:
         Number of nodes in the current layer.
     num_weights:
         Number of weights (number of nodes in the previous layer).
+        
+    Variables
+    ----------
+    error:
+        list containing error values for each node.
+    bias:
+        list containing bias values for each node.
+    weights:
+        2d list(array) of all weights for each node.
+    output:
+        list containing output values for each node.
     """
     def __init__(self, num_nodes, num_weights) -> None:
         self.error = []
