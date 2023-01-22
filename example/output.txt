@@ -6,51 +6,51 @@ Number of hidden layers: 3
 Hidden layer 0: 5 nodes
 Hidden layer 1: 4 nodes
 Hidden layer 2: 6 nodes
-Epochs:	5000
+Epochs:	10000
 Learn rate:	0.0255
 
-Final output weight: [[-1.59, -1.76, -0.05, -0.71, 2.18, 0.42]]
-Final output bias:	 [1.15]
+Final output weight: [[1.87, 0.52, 2.14, 1.49, 2.54, 0.6]]
+Final output bias:	 [0.15]
 ------------------------------------------
 input_data:		[0, 0, 0, 0]
 reference_data:	[0]
 Prediction:	0
-Error:	0.118
+Error:	0.009
 ------------------------------------------
 input_data:		[0, 0, 0, 1]
 reference_data:	[1]
 Prediction:	1
-Error:	0.001
+Error:	0.000
 ------------------------------------------
 input_data:		[0, 0, 1, 0]
 reference_data:	[1]
 Prediction:	1
-Error:	0.001
+Error:	0.000
 ------------------------------------------
 input_data:		[0, 0, 1, 1]
 reference_data:	[0]
 Prediction:	0
-Error:	-0.003
+Error:	0.004
 ------------------------------------------
 input_data:		[0, 1, 0, 0]
 reference_data:	[1]
 Prediction:	1
-Error:	0.001
+Error:	0.000
 ------------------------------------------
 input_data:		[0, 1, 0, 1]
 reference_data:	[0]
 Prediction:	0
-Error:	-0.001
+Error:	-0.000
 ------------------------------------------
 input_data:		[0, 1, 1, 0]
 reference_data:	[0]
 Prediction:	0
-Error:	-0.003
+Error:	0.021
 ------------------------------------------
 input_data:		[0, 1, 1, 1]
 reference_data:	[1]
 Prediction:	1
-Error:	0.002
+Error:	0.000
 ------------------------------------------
 input_data:		[1, 0, 0, 0]
 reference_data:	[1]
@@ -60,36 +60,36 @@ Error:	0.000
 input_data:		[1, 0, 0, 1]
 reference_data:	[0]
 Prediction:	0
-Error:	-0.017
+Error:	-0.011
 ------------------------------------------
 input_data:		[1, 0, 1, 0]
 reference_data:	[0]
 Prediction:	0
-Error:	-0.008
+Error:	0.011
 ------------------------------------------
 input_data:		[1, 0, 1, 1]
 reference_data:	[1]
 Prediction:	1
-Error:	0.002
+Error:	0.000
 ------------------------------------------
 input_data:		[1, 1, 0, 0]
 reference_data:	[0]
 Prediction:	0
-Error:	0.003
+Error:	0.010
 ------------------------------------------
 input_data:		[1, 1, 0, 1]
 reference_data:	[1]
 Prediction:	1
-Error:	0.002
+Error:	0.000
 ------------------------------------------
 input_data:		[1, 1, 1, 0]
 reference_data:	[1]
 Prediction:	1
-Error:	0.002
+Error:	0.000
 ------------------------------------------
 input_data:		[1, 1, 1, 1]
 reference_data:	[0]
 Prediction:	0
-Error:	-0.005
+Error:	0.079
 ------------------------------------------
-Accuracy:	98.94%
+Accuracy:	99.09%

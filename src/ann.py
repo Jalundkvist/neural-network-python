@@ -2,25 +2,25 @@ from dense_layer import Dense_layer
 
 class Ann:
     """
-    Artificial Neural Network (Ann) class that uses a feedforward-backpropagation algorithm 
+    Artificial Neural Network (Ann) class that uses a _feedforward-backpropagation algorithm 
     to train a neural network model using Dense_layer objects.
     
     Parameters
     ----------
-    num_inputs:
+    _num_inputs:
         Number of inputs for the neural network.
-    num_outputs:
+    _num_outputs:
         Number of outputs for the neural network.
-    num_hidden_layers:
+    _num_hidden_layers:
         Number of hidden layers in the neural network.
-    num_hidden_nodes:
+    _num_hidden_nodes:
         Number of nodes in each hidden layer.
     """   
     def __init__(self, num_inputs, num_outputs, num_hidden_layers, num_hidden_nodes):
         assert num_inputs > 0, "Number of inputs must be greater than 0"
         assert num_outputs > 0, "Number of outputs must be greater than 0"
         assert num_hidden_layers > 0, "Number of hidden layers must be greater than 0"
-        assert all(val > 0 for val in num_hidden_nodes), "Number of hidden nodes must be greater than 0"
+        assert num_hidden_nodes > 0, "Number of hidden nodes must be greater than 0"
 
         self._num_inputs = num_inputs
         self._num_outputs = num_outputs
@@ -31,6 +31,15 @@ class Ann:
         
         self._input_data = []
         self._reference_data = []
+    
+    def __del__(self):
+        """__del__ 
+            The destructor for the Ann class.
+        """        
+        del self._hidden_layer
+        del self._output_layer
+        del self._input_data
+        del self._reference_data
 
     def _set_layers(self, num_hidden_nodes):
         """set_layers: 
@@ -41,12 +50,12 @@ class Ann:
         num_hidden_nodes
             number of nodes in all the hidden layers.
         """        
-        self.hidden_layer_ = []
-        self.hidden_layer_.append(Dense_layer(num_hidden_nodes, self._num_inputs))
+        self._hidden_layer = []
+        self._hidden_layer.append(Dense_layer(num_hidden_nodes, self._num_inputs))
         if self._num_hidden_layers > 1:
             for _ in range(self._num_hidden_layers-1):
-                self.hidden_layer_.append(Dense_layer(num_hidden_nodes, num_hidden_nodes))
-        self.output_layer_ = Dense_layer(self._num_outputs, num_hidden_nodes)
+                self._hidden_layer.append(Dense_layer(num_hidden_nodes, num_hidden_nodes))
+        self._output_layer = Dense_layer(self._num_outputs, num_hidden_nodes)
         return
         
     def set_training_data(self, input_data, reference_data):
@@ -71,8 +80,8 @@ class Ann:
             self._input_data = input_data[0:len(reference_data)]
         return
 
-    def feedforward(self, input_data):
-        """feedforward:
+    def _feedforward(self, input_data):
+        """_feedforward:
             Calculates the output result by feeding input data through
             all the layers in the network.
 
@@ -81,14 +90,14 @@ class Ann:
         input_data
             List of the input training values.
         """        
-        self.hidden_layer_[0].feedforward(input_data)
+        self._hidden_layer[0].feedforward(input_data)
         if self._num_hidden_layers > 1:
             for layer in range(1, self._num_hidden_layers):
-                self.hidden_layer_[layer].feedforward(self.hidden_layer_[layer-1].output)
-        self.output_layer_.feedforward(self.hidden_layer_[-1].output)
+                self._hidden_layer[layer].feedforward(self._hidden_layer[layer-1].output)
+        self._output_layer.feedforward(self._hidden_layer[-1].output)
 
-    def backpropagate(self, reference_data):
-        """backpropagate:
+    def _backpropagate(self, reference_data):
+        """_backpropagate:
             Calculates the error for all the nodes from output layer to 
             first dense layer.
 
@@ -97,14 +106,14 @@ class Ann:
         reference_data
             List of the output training values.
         """        
-        self.output_layer_.backprop_outer(reference_data)
-        self.hidden_layer_[-1].backprop_hidden(self.output_layer_)
+        self._output_layer.backprop_outer(reference_data)
+        self._hidden_layer[-1].backprop_hidden(self._output_layer)
         if self._num_hidden_layers > 1:
-            for layer in range(len(self.hidden_layer_)-1, 0, -1):
-                self.hidden_layer_[layer-1].backprop_hidden(self.hidden_layer_[layer])
+            for layer in range(len(self._hidden_layer)-1, 0, -1):
+                self._hidden_layer[layer-1].backprop_hidden(self._hidden_layer[layer])
 
-    def optimize(self, input_data, learn_rate):
-        """optimize:
+    def _optimize(self, input_data, learn_rate):
+        """_optimize:
             Optimizes the weights and biases in the neural network model 
             from first dense layer to output layer.
 
@@ -115,12 +124,17 @@ class Ann:
         learn_rate
             Which rate the model learn, too high = overfitting, too low = underfitting.
         """        
-        self.hidden_layer_[0].optimize(input_data, learn_rate)
+        
+        # Optimize first hidden layer with input data and learning rate
+        self._hidden_layer[0].optimize(input_data, learn_rate)
+        
+        # If more than one hidden layers exist, _optimize each one with the output of the previous layer and learning rate 
         if self._num_hidden_layers > 1:
             for layer in range(1, self._num_hidden_layers):
-                self.hidden_layer_[layer].optimize(self.hidden_layer_[layer-1].output, learn_rate)
-                
-        self.output_layer_.optimize(self.hidden_layer_[-1].output, learn_rate)
+                self._hidden_layer[layer].optimize(self._hidden_layer[layer-1].output, learn_rate)
+        
+        # Optimize output layer with output of last hidden layer and learning rate        
+        self._output_layer.optimize(self._hidden_layer[-1].output, learn_rate)
 
     def train(self, epochs=1000, learn_rate=0.1, accuracy_threshold=98, output_file="output"):
         """train: 
@@ -137,17 +151,19 @@ class Ann:
         output_file
             The file that the output data gets written to.
         """
+        
         if len(self._input_data) == 0:
             print("Please make sure you've set the training data with\
                 the set_training_data method")
             return -1
+        
         else:
             for _ in range(epochs):
-                training_order = self.shuffle()
+                training_order = self._shuffle()
                 for i in training_order:
-                    self.feedforward(self._input_data[i])
-                    self.backpropagate(self._reference_data[i])
-                    self.optimize(self._input_data[i], learn_rate)
+                    self._feedforward(self._input_data[i])
+                    self._backpropagate(self._reference_data[i])
+                    self._optimize(self._input_data[i], learn_rate)
             self._write_file(epochs, learn_rate, output_file)
                     
             if self._accuracy > accuracy_threshold:
@@ -158,27 +174,25 @@ class Ann:
             while self._accuracy < accuracy_threshold:
                 print(f"\nAccuracy is: {self._accuracy}% and is")
                 print(f"below the threshhold of {accuracy_threshold}%\n")
-                answer = input("Do you wish to repeat the training? y/n \n")
-                # Checks if input is str
-                if isinstance(answer, str):
-                    if answer.lower().startswith("y"):
-                        self.train(epochs, learn_rate, accuracy_threshold, output_file)
-                    elif answer.lower().startswith("n"):
-                        quit()
-                    else:
-                        print("Invalid input, please enter 'y' or 'n'\n")
+                
+                answer = input("Do you wish to repeat the training? y/n\n").lower()
+                
+                if answer.startswith("y"):
+                    self.train(epochs, learn_rate, accuracy_threshold, output_file)
+                elif answer.startswith("n"):
+                    quit()
                 else:
                     print("Invalid input, please enter 'y' or 'n'\n")
                 
 
-    def shuffle(self):
-        """shuffle:
+    def _shuffle(self):
+        from random import choices
+        """_shuffle:
             Returns a list of random index numbers based
             on number of input data for optimal training.
             
             k equals the size of the list returned
         """
-        from random import choices
         return (choices(range(len(self._input_data)), k=len(self._input_data)))
     
     def resize_hidden_layer(self, layer, number_of_nodes):
@@ -204,20 +218,20 @@ class Ann:
                 number_of_nodes = 1
             # if only one layer (first and last)
             if  layer == 0 and self._num_hidden_layers == 1:
-                self.hidden_layer_[layer].resize(number_of_nodes, self._num_inputs)
-                self.output_layer_.resize(self.output_layer_.num_nodes, self.hidden_layer_[layer].num_nodes)
+                self._hidden_layer[layer].resize(number_of_nodes, self._num_inputs)
+                self._output_layer.resize(self._output_layer.num_nodes, self._hidden_layer[layer].num_nodes)
             # if first hidden layer
-            elif layer == 0 and self.hidden_layer_[layer] != self.hidden_layer_[-1]:
-                self.hidden_layer_[layer].resize(number_of_nodes, self._num_inputs)
-                self.hidden_layer_[layer+1].resize(self.hidden_layer_[layer+1].num_nodes, self.hidden_layer_[layer].num_nodes)
+            elif layer == 0 and self._hidden_layer[layer] != self._hidden_layer[-1]:
+                self._hidden_layer[layer].resize(number_of_nodes, self._num_inputs)
+                self._hidden_layer[layer+1].resize(self._hidden_layer[layer+1].num_nodes, self._hidden_layer[layer].num_nodes)
             # if layer is in between
-            elif layer > 0 and self.hidden_layer_[layer] != self.hidden_layer_[-1]:
-                self.hidden_layer_[layer].resize(number_of_nodes, self.hidden_layer_[layer-1].num_nodes)
-                self.hidden_layer_[layer+1].resize(self.hidden_layer_[layer+1].num_nodes, self.hidden_layer_[layer].num_nodes)
+            elif layer > 0 and self._hidden_layer[layer] != self._hidden_layer[-1]:
+                self._hidden_layer[layer].resize(number_of_nodes, self._hidden_layer[layer-1].num_nodes)
+                self._hidden_layer[layer+1].resize(self._hidden_layer[layer+1].num_nodes, self._hidden_layer[layer].num_nodes)
             # if last hidden layer
-            elif self.hidden_layer_[layer] == self.hidden_layer_[-1]:
-                self.hidden_layer_[layer].resize(number_of_nodes, self.hidden_layer_[layer-1].num_nodes)
-                self.output_layer_.resize(self.output_layer_.num_nodes, self.hidden_layer_[layer].num_nodes)
+            elif self._hidden_layer[layer] == self._hidden_layer[-1]:
+                self._hidden_layer[layer].resize(number_of_nodes, self._hidden_layer[layer-1].num_nodes)
+                self._output_layer.resize(self._output_layer.num_nodes, self._hidden_layer[layer].num_nodes)
                 
         except IndexError as err:
             print("\n")
@@ -227,7 +241,9 @@ class Ann:
 
     def read_file(self, filename="train_data"):
         """read_file: 
-            Reads the input data.
+            Grabs the training data from .txt file.
+            input data and reference data seperated by comma.
+            Example "0 0 0 1, 1"
 
         Parameters
         ----------
@@ -237,7 +253,7 @@ class Ann:
 
         Returns
         -------
-            Returns the read training data,
+            Returns two lists of training data (input, reference).
         """        
         try:
             with open(f"{filename}.txt", "r") as file:
@@ -262,7 +278,8 @@ class Ann:
         
     def _write_file(self, epochs, learn_rate, filename):
         """_write_file:
-            Writes the results to a text file
+            Writes the results from training to text file and
+            gets the accuracy of the training.
 
         Parameters
         ----------
@@ -280,27 +297,28 @@ class Ann:
             file.write(f"Number of inputs:\t{self._num_inputs}\n")
             file.write(f"Number of outputs:\t{self._num_outputs}\n")
             file.write(f"Number of hidden layers: {self._num_hidden_layers}\n")
+            
             for i in range(self._num_hidden_layers):
-                file.write(f"Hidden layer {i}: {self.hidden_layer_[i].num_nodes} nodes\n")
+                file.write(f"Hidden layer {i}: {self._hidden_layer[i].num_nodes} nodes\n")
 
             file.write(f"Epochs:\t{epochs}\n")
             file.write(f"Learn rate:\t{learn_rate}\n\n")
-            self.output_layer_.round(2)
-            file.write(f"Final output weight: {self.output_layer_.weights}\n")
-            file.write(f"Final output bias:\t {self.output_layer_.bias}\n")
+            self._output_layer.round(2)
+            file.write(f"Final output weight: {self._output_layer.weights}\n")
+            file.write(f"Final output bias:\t {self._output_layer.bias}\n")
 
             file.write("------------------------------------------\n")
             for _ in range(len(self._input_data)):
-                self.feedforward(self._input_data[_])
-                self.backpropagate(self._reference_data[_])
-                self.output_layer_.round(3)
+                self._feedforward(self._input_data[_])
+                self._backpropagate(self._reference_data[_])
+                self._output_layer.round(3)
                 file.write(f"input_data:\t\t{self._input_data[_]}\n")
                 file.write(f"reference_data:\t{self._reference_data[_]}\n")
 
-                for i in range(len(self.output_layer_.output)):
-                    file.write(f"Prediction:\t{round(self.output_layer_.output[i])}\n")
-                    file.write(f"Error:\t{self.output_layer_.error[i]:.3f}\n")
-                    total_error += abs(self.output_layer_.error[i])
+                for i in range(len(self._output_layer.output)):
+                    file.write(f"Prediction:\t{round(self._output_layer.output[i])}\n")
+                    file.write(f"Error:\t{self._output_layer.error[i]:.3f}\n")
+                    total_error += abs(self._output_layer.error[i])
                 file.write("------------------------------------------\n")
             self._accuracy = round((100 - (total_error/total_predictions)*100),2)
             file.write(f"Accuracy:\t{self._accuracy}%")
@@ -320,17 +338,20 @@ class Ann:
             returns a list of predicted values
             based on number of outputs.
         """        
-        if self._training_complete:
-            self.feedforward(input)
-            result = []
-            for i in range(self._num_outputs):
-                result.append(round(self.output_layer_.output[i]))
-            print(f"Input: {input}")
-            print(f"Predicted value: {result}")
-            return result
-        else:
-            print("Please train the neural network to acceptable accuracy before using predict")
+        if not self._training_complete:
+            print("Please train the neural network to acceptable\
+                accuracy before using predict")
             return -1
+
+        self._feedforward(input) 
+        result = []  
+        for i in range(self._num_outputs):
+            result.append(round(self._output_layer.output[i]))
+
+        print(f"Input: {input}") 
+        print(f"Predicted value: {result}")  
+
+        return result
         
 if __name__ == "__main__":
     print("Executing module ann.py, not recommended.")
